@@ -1,5 +1,6 @@
 package  com.practica.practica.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class UsuarioService {
 
     public Optional<Usuario> buscarPorId(int id) {
         return repository.findById(id);
+    }
+
+    public List<Usuario> getAllUsers(){
+        return repository.findAll();
     }
 
     public Page<Usuario> buscarUsuarios(String starts_with, int page, int size) {

@@ -15,7 +15,7 @@ public class UsuarioExceptionAdvice {
 
   @ExceptionHandler(UsuarioNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  ErrorMessage userNotFoundHandler(UsuarioNotFoundException ex) {
+  ErrorMessage usuarioNotFoundHandler(UsuarioNotFoundException ex) {
     return new ErrorMessage(ex.getMessage());
   }
 

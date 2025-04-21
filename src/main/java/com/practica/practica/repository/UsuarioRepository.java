@@ -8,8 +8,6 @@ import com.practica.practica.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario,Integer> {
 
-
-
     Page<Usuario> findByNombreStartsWith(@Param("empieza_con") String startsWith, Pageable pageable);
 
 }

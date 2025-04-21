@@ -1,7 +1,11 @@
 package com.practica.practica.controller;
 
+import java.util.List;
+import java.util.Date;
+
 import com.practica.practica.model.Usuario;
 import com.practica.practica.service.UsuarioService;
+import com.practica.practica.exceptions.UsuarioNotFoundException;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,9 +56,57 @@ public class UsuarioController{
         if(!service.existeUsuarioPorId(nuevo.getId())){
             Usuario user = service.crearUsuario(nuevo);
             return ResponseEntity.created(linkTo(UsuarioController.class).slash(user.getId()).toUri()).build();
-            
         }
 
         return null;
     }
+
+    @GetMapping()
+    public List<Usuario> getUsuarios(){
+        List<Usuario> usuarios = service.getAllUsers();
+        return usuarios;
+    }
+
+    @GetMapping(value="/{id}", produces = {"application/json"})
+    public Usuario buscarUsuario(@PathVariable int id){
+        Usuario user = service.buscarPorId(id).orElseThrow(() -> new UsuarioNotFoundException(id));
+        return user;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> updateUsuario(@Valid @RequestBody Usuario newUsuario, @PathVariable int id){
+        Usuario ret = service.buscarPorId(id).map(
+            Usuario -> {
+                String new_nombre = newUsuario.getNombre();
+                String new_matricula = newUsuario.getMatricula();
+                Date new_fecha = newUsuario.getFecha_nacimiento();
+                String new_correo = newUsuario.getCorreo_electronico();
+
+                if(new_nombre != null) Usuario.setNombre(new_nombre);
+                if(new_matricula != null) Usuario.setMatricula(new_matricula);
+                if(new_fecha != null) Usuario.setFecha_nacimiento(new_fecha);
+                if(new_correo != null) Usuario.setCorreo_electronico(new_correo);
+
+
+                return service.crearUsuario(Usuario);
+            }).orElseThrow(() -> new UsuarioNotFoundException(id));
+
+
+        return ResponseEntity.ok(ret);
+    }
+
+
+    @DeleteMapping(value="/{id}")
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable int id){
+        if(service.existeUsuarioPorId(id)){
+            service.eliminarUsuario(id);
+        }else{
+            throw new UsuarioNotFoundException(id);
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+
+    
+    
 }

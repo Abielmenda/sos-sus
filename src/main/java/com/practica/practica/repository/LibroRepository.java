@@ -10,6 +10,14 @@ import org.springframework.data.repository.query.Param;
 public interface LibroRepository extends JpaRepository<Libro,Integer> {
 
     Page<Libro> findByTituloContains(@Param("contiene") String contiene, Pageable pageable);
+    Page<Libro> findByCopiasGreaterThan(int min, Pageable pageable);
+
+    Page<Libro> findByTituloContainingAndCopiasGreaterThan(
+        @Param("contiene") String contiene, 
+        @Param("min") int min, 
+        Pageable pageable
+    );
+
 
 }
 

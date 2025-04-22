@@ -40,8 +40,8 @@ public class Libro extends RepresentationModel<Libro>{
     @Schema(description = "Editorial del libro", required = false, example = "Circulo de lectores")
 	private String editorial;
 
-    @Schema(description = "ISBN del libro", required = false, example = "8435009513")
-	private int isbn;
+    @Schema(description = "ISBN del libro", required = false, example = "8435009513-E")
+	private String isbn;
 
     @Schema(description = "Copias disponibles del libro", required = true, example = "2")
     // @NotNull(message = "Es obligatorio indicar las copias disponibles y no pueden ser 0")

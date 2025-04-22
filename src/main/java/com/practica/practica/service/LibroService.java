@@ -37,17 +37,22 @@ public class LibroService{
         return repository.findAll();
     }
 
-    public Page<Libro> buscarLibros(String contiene, int page, int size) {
+    public Page<Libro> buscarLibros(String contiene, Boolean disponible, int page, int size) {
 
         Pageable paginable = PageRequest.of(page, size);
-        if (contiene == null) {
+        if (contiene == null && disponible == null) {
             return repository.findAll(paginable);
-        } else {
+        } else if(disponible == null){
             return repository.findByTituloContains(contiene, paginable);
+        }else if(contiene == null){
+            return repository.findByCopiasGreaterThan(0,paginable);
+        }
+        else {
+            return repository.findByTituloContainingAndCopiasGreaterThan(contiene,0, paginable);
         }
     }
 
-    public void eliminarLibros(int id) {
+    public void eliminarLibro(int id) {
         repository.deleteById(id);
     }
 

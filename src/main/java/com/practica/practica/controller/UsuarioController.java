@@ -67,12 +67,11 @@ public class UsuarioController{
 
     @GetMapping()
     public ResponseEntity<PagedModel<Usuario>> getUsuarios(
-        @RequestParam(defaultValue = "",required=false)String starts_with,
         @RequestParam(defaultValue = "0", required = false) int page,
-        @RequestParam(defaultValue = "2", required = false) int size) {
+        @RequestParam(defaultValue = "4", required = false) int size) {
 
 
-        Page<Usuario> usuarios = service.buscarUsuarios(starts_with, page, size);
+        Page<Usuario> usuarios = service.buscarUsuarios(page, size);
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(usuarios,usuarioModelAssembler));
     }
 

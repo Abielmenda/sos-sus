@@ -70,7 +70,7 @@ public class LibroController{
         @RequestParam(defaultValue = "",required=false)String contiene,
         @RequestParam(defaultValue = "",required=false) Boolean disponible,
         @RequestParam(defaultValue = "0", required = false) int page,
-        @RequestParam(defaultValue = "2", required = false) int size) {
+        @RequestParam(defaultValue = "4", required = false) int size) {
 
 
         Page<Libro> libro = service.buscarLibros(contiene,disponible, page, size);
@@ -79,25 +79,28 @@ public class LibroController{
 
     @GetMapping(value="/{id}", produces = {"application/json"})
     public ResponseEntity<Libro> buscarLibro(@PathVariable int id){
-        Libro user = service.buscarPorId(id).orElseThrow(() -> new LibroNotFoundException(id));
-        user.add(linkTo(methodOn(LibroController.class).buscarLibro(id)).withSelfRel());
-        return ResponseEntity.ok(user);
+        Libro libro = service.buscarPorId(id).orElseThrow(() -> new LibroNotFoundException(id));
+        libro.add(linkTo(methodOn(LibroController.class).buscarLibro(id)).withSelfRel());
+        return ResponseEntity.ok(libro);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Libro> updateLibro(@Valid @RequestBody Libro newLibro, @PathVariable int id){
         Libro ret = service.buscarPorId(id).map(
             Libro -> {
-                // String new_nombre = newLibro.getNombre();
-                // String new_matricula = newLibro.getMatricula();
-                // Date new_fecha = newLibro.getFecha_nacimiento();
-                // String new_correo = newLibro.getCorreo_electronico();
-                //
-                // if(new_nombre != null) Libro.setNombre(new_nombre);
-                // if(new_matricula != null) Libro.setMatricula(new_matricula);
-                // if(new_fecha != null) Libro.setFecha_nacimiento(new_fecha);
-                // if(new_correo != null) Libro.setCorreo_electronico(new_correo);
-                //
+                String new_titulo = newLibro.getTitulo();
+                String new_autores = newLibro.getAutores();
+                String new_edicion = newLibro.getEdicion();
+                String new_editorial = newLibro.getEditorial();
+                String new_isbn = newLibro.getIsbn();
+                Integer new_copias = newLibro.getCopias();
+
+                if(new_titulo != null) Libro.setTitulo(new_titulo);
+                if(new_autores != null) Libro.setAutores(new_autores);
+                if(new_edicion != null) Libro.setEdicion(new_edicion);
+                if(new_editorial != null) Libro.setEditorial(new_editorial);
+                if(new_isbn != null) Libro.setIsbn(new_isbn);
+                if(new_copias != null) Libro.setCopias(new_copias);
 
                 return service.crearLibro(Libro);
             }).orElseThrow(() -> new LibroNotFoundException(id));

@@ -37,14 +37,10 @@ public class UsuarioService {
         return repository.findAll();
     }
 
-    public Page<Usuario> buscarUsuarios(String starts_with, int page, int size) {
+    public Page<Usuario> buscarUsuarios(int page, int size) {
 
         Pageable paginable = PageRequest.of(page, size);
-        if (starts_with == null) {
-            return repository.findAll(paginable);
-        } else {
-            return repository.findByNombreStartsWith(starts_with, paginable);
-        }
+        return repository.findAll(paginable);
     }
 
     public void eliminarUsuario(int id) {

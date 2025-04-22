@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.practica.practica.model.Usuario;
 import com.practica.practica.service.UsuarioService;
+import com.practica.practica.assembler.UsuarioModelAssembler;
 import com.practica.practica.exceptions.UsuarioNotFoundException;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -48,6 +50,8 @@ import lombok.AllArgsConstructor;
 public class UsuarioController{
 
     private final UsuarioService service;
+    private PagedResourcesAssembler<Usuario> pagedResourcesAssembler;
+    private UsuarioModelAssembler usuarioModelAssembler;
 
 
     @PostMapping()
@@ -62,15 +66,21 @@ public class UsuarioController{
     }
 
     @GetMapping()
-    public List<Usuario> getUsuarios(){
-        List<Usuario> usuarios = service.getAllUsers();
-        return usuarios;
+    public ResponseEntity<PagedModel<Usuario>> getUsuarios(
+        @RequestParam(defaultValue = "",required=false)String starts_with,
+        @RequestParam(defaultValue = "0", required = false) int page,
+        @RequestParam(defaultValue = "2", required = false) int size) {
+
+
+        Page<Usuario> usuarios = service.buscarUsuarios(starts_with, page, size);
+        return ResponseEntity.ok(pagedResourcesAssembler.toModel(usuarios,usuarioModelAssembler));
     }
 
     @GetMapping(value="/{id}", produces = {"application/json"})
-    public Usuario buscarUsuario(@PathVariable int id){
+    public ResponseEntity<Usuario> buscarUsuario(@PathVariable int id){
         Usuario user = service.buscarPorId(id).orElseThrow(() -> new UsuarioNotFoundException(id));
-        return user;
+        user.add(linkTo(methodOn(UsuarioController.class).buscarUsuario(id)).withSelfRel());
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")

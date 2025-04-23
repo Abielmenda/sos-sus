@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.practica.practica.model.Prestamo;
+import com.practica.practica.model.*;
 import com.practica.practica.repository.PrestamoRepository;
 
 import lombok.AllArgsConstructor;
@@ -48,5 +48,14 @@ public class PrestamoService{
 
     public Optional<Prestamo> buscarPorId(int id){
         return repository.findById(id);
+    }
+
+
+    public boolean buscarUsuarioPorId(int id){
+        return repository.myFindById_usuario(id)!=null;
+    }
+
+    public boolean buscarLibroPorId(int id){
+        return repository.myFindById_libro(id)!=null;
     }
 }

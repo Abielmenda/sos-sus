@@ -25,6 +25,13 @@ public class UsuarioExceptionAdvice {
     return new ErrorMessage(ex.getMessage());
   }
 
+  @ExceptionHandler(UsuarioTienePrestamo.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  ErrorMessage UsuarioPenalizadoExceptionHandler(UsuarioTienePrestamo ex) {
+    return new ErrorMessage(ex.getMessage());
+  }
+
+
 
 
   // @ExceptionHandler(EmpleadoNotAllowedException.class)

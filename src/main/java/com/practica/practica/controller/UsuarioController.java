@@ -11,6 +11,8 @@ import com.practica.practica.service.PrestamoService;
 import com.practica.practica.service.UsuarioService;
 import com.practica.practica.assembler.UsuarioModelAssembler;
 import com.practica.practica.exceptions.UsuarioNotFoundException;
+import com.practica.practica.exceptions.UsuarioTienePrestamo;
+
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,7 +107,6 @@ public class UsuarioController{
                 if(new_correo != null) Usuario.setCorreo_electronico(new_correo);
                 if(penalizacion != null) Usuario.setFin_penalizacion(penalizacion);
 
-
                 return service.crearUsuario(Usuario);
             }).orElseThrow(() -> new UsuarioNotFoundException(id));
 
@@ -113,10 +114,16 @@ public class UsuarioController{
         return ResponseEntity.ok(ret);
     }
 
+    boolean tienePrestamo(int id){
+        return prestamo_service.buscarUsuarioPorId(id);
+    }
 
     @DeleteMapping(value="/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable int id){
-        if(service.existeUsuarioPorId(id)){
+        if(tienePrestamo(id)){
+            throw new UsuarioTienePrestamo(id);
+        }
+        else if(service.existeUsuarioPorId(id)){
             service.eliminarUsuario(id);
         }else{
             throw new UsuarioNotFoundException(id);

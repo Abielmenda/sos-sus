@@ -5,8 +5,12 @@ import java.util.Date;
 
 import com.practica.practica.model.Libro;
 import com.practica.practica.service.LibroService;
+import com.practica.practica.service.PrestamoService;
 import com.practica.practica.assembler.LibroModelAssembler;
+import com.practica.practica.assembler.PrestamoModelAssembler;
 import com.practica.practica.exceptions.LibroNotFoundException;
+import com.practica.practica.exceptions.LibroNoDevueltoException;
+
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +54,8 @@ import lombok.AllArgsConstructor;
 public class LibroController{
 
     private final LibroService service;
+    private final PrestamoService prestamo_service;
+
     private PagedResourcesAssembler<Libro> pagedResourcesAssembler;
     private LibroModelAssembler usuarioModelAssembler;
 
@@ -110,9 +116,16 @@ public class LibroController{
     }
 
 
+    boolean estaPrestado(int id){
+        return prestamo_service.buscarLibroPorId(id);
+    }
+
     @DeleteMapping(value="/{id}")
     public ResponseEntity<Void> eliminarLibro(@PathVariable int id){
-        if(service.existeLibroPorId(id)){
+        if(estaPrestado(id)){
+            throw new LibroNoDevueltoException(id);
+        }
+        else if(service.existeLibroPorId(id)){
             service.eliminarLibro(id);
         }else{
             throw new LibroNotFoundException(id);

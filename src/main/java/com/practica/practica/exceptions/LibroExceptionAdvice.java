@@ -21,7 +21,14 @@ public class LibroExceptionAdvice {
 
   @ExceptionHandler(LibroNoDisponibleException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  ErrorMessage LibroNoDisponibleHandler(LibroNoDisponibleException ex) {
+  ErrorMessage libroNoDisponibleHandler(LibroNoDisponibleException ex) {
+    return new ErrorMessage(ex.getMessage());
+  }
+
+
+  @ExceptionHandler(LibroNoDevueltoException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  ErrorMessage libroNoDevueltoHandler(LibroNoDevueltoException ex) {
     return new ErrorMessage(ex.getMessage());
   }
 

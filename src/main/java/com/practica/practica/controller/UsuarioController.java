@@ -125,8 +125,8 @@ public class UsuarioController{
     }
 
 
-    @GetMapping(value="/{id}/prestamos", produces = {"application/json"})
-    public ResponseEntity<Map<String,Object>> buscarPrestamosDeUsuario(
+    @GetMapping(value="/{id}/prestamos/summary", produces = {"application/json"})
+    public ResponseEntity<Map<String,Object>> summaryPrestamosDeUsuario(
 
         @PathVariable int id,
 
@@ -166,6 +166,57 @@ public class UsuarioController{
         return ResponseEntity.ok(response);
 
     }
+
+
+    @GetMapping(value="/{id}/prestamos", produces = {"application/json"})
+    public ResponseEntity<List<Prestamo>> buscarPrestamosActivosDeUsuario(
+
+        @PathVariable int id,
+        @RequestParam(defaultValue = "0", required = false) int page,
+        @RequestParam(defaultValue = "4", required = false) int size){
+
+        Usuario user = service.buscarPorId(id).orElseThrow(() -> new UsuarioNotFoundException(id));
+
+        Date start = new Date(0);
+        Date end = new Date();
+        
+        List<Prestamo> prestamos_activos = prestamo_service.buscarPrestamosActivosDeUsuario(id,start,end);
+
+        for(Prestamo p : prestamos_activos){
+            p.add(linkTo(methodOn(PrestamoController.class).buscarPrestamo(p.getId_prestamo())).withSelfRel());
+        }
+
+        return ResponseEntity.ok(prestamos_activos);
+
+    }
+
+
+    @GetMapping(value="/{id}/prestamos/history", produces = {"application/json"})
+    public ResponseEntity<List<Prestamo>> buscarPrestamosPasadosDeUsuario(
+
+        @PathVariable int id,
+        @RequestParam(defaultValue = "0", required = false) int page,
+        @RequestParam(defaultValue = "4", required = false) int size){
+
+        Usuario user = service.buscarPorId(id).orElseThrow(() -> new UsuarioNotFoundException(id));
+
+        Date start = new Date(0);
+        Date end = new Date();
+        
+        List<Prestamo> prestamos_devueltos = prestamo_service.buscarPrestamosDevueltosDeUsuario(id,start,end);
+
+        for(Prestamo p : prestamos_devueltos){
+            p.add(linkTo(methodOn(PrestamoController.class).buscarPrestamo(p.getId_prestamo())).withSelfRel());
+        }
+
+        return ResponseEntity.ok(prestamos_devueltos);
+
+    }
+
+
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.practica.practica.controller;
 
 import java.util.List;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -100,18 +101,56 @@ public class PrestamoController{
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Prestamo> updatePrestamo(@Valid @RequestBody Prestamo newPrestamo, @PathVariable int id){
+    public ResponseEntity<Prestamo> devolverPrestamo(@Valid @RequestBody Prestamo newPrestamo, @PathVariable int id){
         Prestamo ret = service.buscarPorId(id).map(
             Prestamo -> {
-                    return service.crearPrestamo(Prestamo);
+
+                Date new_fecha_devuelto = newPrestamo.getFecha_devuelto();
+                if(new_fecha_devuelto != null){
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(Prestamo.getFecha_prestado()); 
+                    cal.add(Calendar.WEEK_OF_YEAR, 2); 
+                    Date deadline = cal.getTime();
+
+                    if(new_fecha_devuelto.after(deadline)){
+                        usuario_service.penalizar(Prestamo.getId_usuario());
+                    }
+
+                    Prestamo.setFecha_devuelto(new_fecha_devuelto);
+                }
+                return service.crearPrestamo(Prestamo);
             }).orElseThrow(() -> new PrestamoNotFoundException(id));
 
 
         return ResponseEntity.ok(ret);
     }
 
+
+    //Ampliar plazo
     
     
+    @PutMapping("/{id}/ampliar")
+    public ResponseEntity<Prestamo> ampliarPrestamo(@PathVariable int id){
+        Prestamo ret = service.buscarPorId(id).map(
+            Prestamo -> {
+                Usuario user = usuario_service.buscarPorId(Prestamo.getId_usuario()).orElseThrow(()->new UsuarioNotFoundException(Prestamo.getId_usuario()));
+                Date hoy = new Date();
+
+                if(hoy.before(user.getFin_penalizacion())){
+                    throw new UsuarioPenalizadoException(user.getId());
+                }
+
+                //En caso de que ya se hubiese devuelto
+                if(Prestamo.getFecha_devuelto() != null){
+                    throw new PrestamoDevueltoException(Prestamo.getId_prestamo());
+                }
+                Prestamo.setFecha_prestado(new Date());
+                return service.crearPrestamo(Prestamo);
+            }).orElseThrow(() -> new PrestamoNotFoundException(id));
+
+
+        return ResponseEntity.ok(ret);
+    }
 }
 
 

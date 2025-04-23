@@ -2,6 +2,8 @@ package  com.practica.practica.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +47,15 @@ public class UsuarioService {
 
     public void eliminarUsuario(int id) {
         repository.deleteById(id);
+    }
+
+    public void penalizar(int id){
+        Date d = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d); 
+        cal.add(Calendar.WEEK_OF_YEAR, 1); 
+        Date deadline = cal.getTime();
+        repository.updateFin_penalizacion(deadline,id);
     }
 }
 

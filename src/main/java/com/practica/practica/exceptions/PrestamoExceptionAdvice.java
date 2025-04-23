@@ -19,6 +19,20 @@ public class PrestamoExceptionAdvice {
     return new ErrorMessage(ex.getMessage());
   }
 
+  @ExceptionHandler(PrestamoNoAlterable.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  ErrorMessage prestamoNoAlterableHandler(PrestamoNoAlterable ex) {
+    return new ErrorMessage(ex.getMessage());
+  }
+
+  @ExceptionHandler(PrestamoDevueltoException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  ErrorMessage prestamoNoAlterableHandler(PrestamoDevueltoException ex) {
+    return new ErrorMessage(ex.getMessage());
+  }
+
+
+
   // @ExceptionHandler(EmpleadoNotAllowedException.class)
   // @ResponseStatus(HttpStatus.CONFLICT)
   // ErrorMessage userNotAllowedHandler(EmpleadoNotAllowedException ex) {

@@ -1,9 +1,13 @@
 package com.practica.practica.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Date;
+import java.util.HashMap;
 
 import com.practica.practica.model.Usuario;
+import com.practica.practica.model.Prestamo;
+import com.practica.practica.service.PrestamoService;
 import com.practica.practica.service.UsuarioService;
 import com.practica.practica.assembler.UsuarioModelAssembler;
 import com.practica.practica.exceptions.UsuarioNotFoundException;
@@ -33,6 +37,8 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 import jakarta.validation.Valid;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -50,6 +56,7 @@ import lombok.AllArgsConstructor;
 public class UsuarioController{
 
     private final UsuarioService service;
+    private final PrestamoService prestamo_service;
     private PagedResourcesAssembler<Usuario> pagedResourcesAssembler;
     private UsuarioModelAssembler usuarioModelAssembler;
 
@@ -116,6 +123,51 @@ public class UsuarioController{
         }
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping(value="/{id}/prestamos", produces = {"application/json"})
+    public ResponseEntity<Map<String,Object>> buscarPrestamosDeUsuario(
+
+        @PathVariable int id,
+
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        @RequestParam(required=false) Date start,
+
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        @RequestParam(required=false) Date end,
+
+        @RequestParam(defaultValue = "0", required = false) int page,
+        @RequestParam(defaultValue = "4", required = false) int size){
+
+        Usuario user = service.buscarPorId(id).orElseThrow(() -> new UsuarioNotFoundException(id));
+
+        if (start == null) start = new Date(0); 
+        if (end == null) end = new Date(); 
+        
+        List<Prestamo> prestamos_activos = prestamo_service.buscarPrestamosActivosDeUsuario(id,start,end);
+        List<Prestamo> prestamos_pasados = prestamo_service.buscarPrestamosDevueltosDeUsuario(id,start,end);
+
+        for(Prestamo p : prestamos_activos){
+            p.add(linkTo(methodOn(PrestamoController.class).buscarPrestamo(p.getId_prestamo())).withSelfRel());
+        }
+
+        for(Prestamo p : prestamos_pasados){
+            p.add(linkTo(methodOn(PrestamoController.class).buscarPrestamo(p.getId_prestamo())).withSelfRel());
+        }
+
+
+        user.add(linkTo(methodOn(UsuarioController.class).buscarUsuario(id)).withSelfRel());
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("usuario", user);
+        response.put("prestamos_activos", prestamos_activos);
+        response.put("prestamos_pasados", prestamos_pasados);
+
+        return ResponseEntity.ok(response);
+
+    }
+
+
 
 
     

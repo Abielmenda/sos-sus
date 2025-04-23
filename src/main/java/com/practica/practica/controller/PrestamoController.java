@@ -86,9 +86,18 @@ public class PrestamoController{
             Prestamo prestamo = service.crearPrestamo(nuevo);
             return ResponseEntity.created(linkTo(PrestamoController.class).slash(nuevo.getId_prestamo()).toUri()).build();
         }
-
         return null;
     }
+
+    
+    @GetMapping(value="/{id}", produces = {"application/json"})
+    public ResponseEntity<Prestamo> buscarPrestamo(@PathVariable int id){
+        Prestamo prestamo = service.buscarPorId(id).orElseThrow(() -> new PrestamoNotFoundException(id));
+        prestamo.add(linkTo(methodOn(PrestamoController.class).buscarPrestamo(id)).withSelfRel());
+        return ResponseEntity.ok(prestamo);
+    }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Prestamo> updatePrestamo(@Valid @RequestBody Prestamo newPrestamo, @PathVariable int id){

@@ -39,5 +39,9 @@ public class Usuario extends RepresentationModel<Usuario> {
 	@Schema(description = "correo del usuario", required = false, example = "lionel.scopice@alumnos.upm.es")
     private String correo_electronico;
 
+    @Schema(description = "si un usuario esta penalizado no podra hacer prestamos durante una semana")
+    private Date fin_penalizacion;
+
+
 }
 

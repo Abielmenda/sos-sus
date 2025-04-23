@@ -55,7 +55,6 @@ public class LibroService{
     public void eliminarLibro(int id) {
         repository.deleteById(id);
     }
-
 }
 
 

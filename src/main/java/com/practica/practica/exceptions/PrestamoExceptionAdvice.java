@@ -11,20 +11,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class LibroExceptionAdvice {
+public class PrestamoExceptionAdvice {
 
-  @ExceptionHandler(LibroNotFoundException.class)
+  @ExceptionHandler(PrestamoNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  ErrorMessage libroNotFoundHandler(LibroNotFoundException ex) {
+  ErrorMessage prestamoNotFoundHandler(PrestamoNotFoundException ex) {
     return new ErrorMessage(ex.getMessage());
   }
-
-  @ExceptionHandler(LibroNoDisponibleException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  ErrorMessage LibroNoDisponibleHandler(LibroNoDisponibleException ex) {
-    return new ErrorMessage(ex.getMessage());
-  }
-
 
   // @ExceptionHandler(EmpleadoNotAllowedException.class)
   // @ResponseStatus(HttpStatus.CONFLICT)
@@ -52,5 +45,6 @@ public class LibroExceptionAdvice {
   // }
   //
 }
+
 
 

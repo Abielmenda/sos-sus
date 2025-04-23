@@ -90,11 +90,13 @@ public class UsuarioController{
                 String new_matricula = newUsuario.getMatricula();
                 Date new_fecha = newUsuario.getFecha_nacimiento();
                 String new_correo = newUsuario.getCorreo_electronico();
+                Date penalizacion = newUsuario.getFin_penalizacion();
 
                 if(new_nombre != null) Usuario.setNombre(new_nombre);
                 if(new_matricula != null) Usuario.setMatricula(new_matricula);
                 if(new_fecha != null) Usuario.setFecha_nacimiento(new_fecha);
                 if(new_correo != null) Usuario.setCorreo_electronico(new_correo);
+                if(penalizacion != null) Usuario.setFin_penalizacion(penalizacion);
 
 
                 return service.crearUsuario(Usuario);

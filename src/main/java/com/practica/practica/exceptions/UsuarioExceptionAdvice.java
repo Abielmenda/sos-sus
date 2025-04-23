@@ -19,6 +19,14 @@ public class UsuarioExceptionAdvice {
     return new ErrorMessage(ex.getMessage());
   }
 
+  @ExceptionHandler(UsuarioPenalizadoException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  ErrorMessage UsuarioPenalizadoExceptionHandler(UsuarioPenalizadoException ex) {
+    return new ErrorMessage(ex.getMessage());
+  }
+
+
+
   // @ExceptionHandler(EmpleadoNotAllowedException.class)
   // @ResponseStatus(HttpStatus.CONFLICT)
   // ErrorMessage userNotAllowedHandler(EmpleadoNotAllowedException ex) {

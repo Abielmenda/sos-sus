@@ -46,6 +46,5 @@ public class UsuarioService {
     public void eliminarUsuario(int id) {
         repository.deleteById(id);
     }
-
 }
 

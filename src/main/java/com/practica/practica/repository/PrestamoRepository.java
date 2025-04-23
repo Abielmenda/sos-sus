@@ -24,5 +24,9 @@ public interface PrestamoRepository extends JpaRepository<Prestamo,Integer> {
     @Query(value = "SELECT * from prestamos WHERE id_usuario=?1 AND fecha_devuelto IS NOT NULL AND fecha_prestado BETWEEN ?2 AND ?3 ORDER BY fecha_devuelto DESC LIMIT 5",nativeQuery = true)
     List<Prestamo> findDevueltosByIdUsuario(int id,Date start, Date end);
 
+    @Query(value = "SELECT * from prestamos WHERE id_usuario=?1 AND fecha_devuelto IS NOT NULL AND fecha_prestado BETWEEN ?2 AND ?3",nativeQuery = true)
+    List<Prestamo> findAllDevueltosByIdUsuario(int id,Date start, Date end);
+
+
 
 }

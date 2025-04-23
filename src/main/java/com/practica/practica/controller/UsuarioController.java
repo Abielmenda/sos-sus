@@ -203,7 +203,7 @@ public class UsuarioController{
         Date start = new Date(0);
         Date end = new Date();
         
-        List<Prestamo> prestamos_devueltos = prestamo_service.buscarPrestamosDevueltosDeUsuario(id,start,end);
+        List<Prestamo> prestamos_devueltos = prestamo_service.buscarTodosPrestamosDevueltosDeUsuario(id,start,end);
 
         for(Prestamo p : prestamos_devueltos){
             p.add(linkTo(methodOn(PrestamoController.class).buscarPrestamo(p.getId_prestamo())).withSelfRel());

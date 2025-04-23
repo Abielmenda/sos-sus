@@ -37,6 +37,11 @@ public class PrestamoService{
         return repository.findDevueltosByIdUsuario(id,start,end);
     }
 
+    public List<Prestamo> buscarTodosPrestamosDevueltosDeUsuario(int id,Date start, Date end){
+        return repository.findAllDevueltosByIdUsuario(id,start,end);
+    }
+
+
     public List<Prestamo> getAllPrestamosDeUnLibro(int id){
         return repository.findAllByIdAndFecha_devueltoIsNull(id);
     }

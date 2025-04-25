@@ -157,6 +157,7 @@ public class PrestamoController{
 
                 Prestamo.setFecha_prestado(hoy);
                 return service.crearPrestamo(Prestamo);
+
             }).orElseThrow(() -> new PrestamoNotFoundException(id));
 
 

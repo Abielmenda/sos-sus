@@ -32,6 +32,13 @@ public class PrestamoExceptionAdvice {
   }
 
 
+  @ExceptionHandler(PrestamoNoSePuedeAmpliarException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  ErrorMessage prestamoNoAlterableHandler(PrestamoNoSePuedeAmpliarException ex) {
+    return new ErrorMessage(ex.getMessage());
+  }
+
+
 
   // @ExceptionHandler(EmpleadoNotAllowedException.class)
   // @ResponseStatus(HttpStatus.CONFLICT)

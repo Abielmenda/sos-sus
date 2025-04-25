@@ -144,7 +144,18 @@ public class PrestamoController{
                 if(Prestamo.getFecha_devuelto() != null){
                     throw new PrestamoDevueltoException(Prestamo.getId_prestamo());
                 }
-                Prestamo.setFecha_prestado(new Date());
+
+                //Comprobar que no se intenta ampliar un libro fuera de fecha
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(Prestamo.getFecha_prestado()); 
+                cal.add(Calendar.WEEK_OF_YEAR, 2); 
+                Date deadline = cal.getTime();
+
+                if(hoy.after(deadline)){
+                    throw new PrestamoNoSePuedeAmpliarException();
+                }
+
+                Prestamo.setFecha_prestado(hoy);
                 return service.crearPrestamo(Prestamo);
             }).orElseThrow(() -> new PrestamoNotFoundException(id));
 

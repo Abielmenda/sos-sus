@@ -1,7 +1,10 @@
-/root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/BibliotecaService.java
 /root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/Cliente.java
+/root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/LibroService.java
+/root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/UsuarioService.java
 /root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/Href.java
 /root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/Libro.java
+/root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/Libros.java
+/root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/PageLibro.java
 /root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/PageLinks.java
 /root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/PageMetadata.java
 /root/Documents/sos/practica/practica-cliente/src/main/java/com/practica/practica/model/PageUsuario.java

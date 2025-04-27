@@ -78,9 +78,8 @@ public class UsuarioController{
     public ResponseEntity<PagedModel<Usuario>> getUsuarios(
         @RequestParam(defaultValue = "0", required = false) int page,
         @RequestParam(defaultValue = "4", required = false) int size) {
-
-
         Page<Usuario> usuarios = service.buscarUsuarios(page, size);
+
         return ResponseEntity.ok(pagedResourcesAssembler.toModel(usuarios,usuarioModelAssembler));
     }
 

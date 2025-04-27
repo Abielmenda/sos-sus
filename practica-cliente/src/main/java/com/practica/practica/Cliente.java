@@ -6,7 +6,8 @@ import java.util.Date;
 
 public class Cliente {
 
-    static BibliotecaService service = new BibliotecaService();
+    static UsuarioService usuario_service = new UsuarioService();
+    static LibroService libro_service = new LibroService();
 
     public static void main(String[] args) {
 
@@ -20,41 +21,59 @@ public class Cliente {
 
         int it=1;
         for (;it<50;) {
-            service.deleteUsuario(it++);
+            usuario_service.deleteUsuario(it++);
         }
 
+        System.out.println();
         System.out.println("#### Añadir empleado Laura ####");
-        service.postUsuario("Laura","291202",new Date(),"aura-laura@boee.com");
+        usuario_service.postUsuario("Laura","291202",new Date(),"aura-laura@boee.com");
         // System.out.println();
         // System.out.println("#### Añadir empleado Laura ####");
-        // service.postEmpleado("Laura");
+        // usuario_service.postEmpleado("Laura");
         System.out.println();
-        service.putUsuario(1, "Leo Messi","123123",new Date(),null);
+        usuario_service.putUsuario(1, "Leo Messi","123123",new Date(),null);
 
+
+        System.out.println();
         System.out.println("### Obtener usuario existente ####");
-        service.getUsuario(1);
+        usuario_service.getUsuario(1);
 
         System.out.println();
         System.out.println("#### Obtener usuario no existente ####");
-        service.getUsuario(99);
+        usuario_service.getUsuario(99);
+
         System.out.println();
         System.out.println("#### Actualizar empleado 1  ####");
-        service.putUsuario(1, "Niki Lauda","123123",new Date(),null);
+        usuario_service.putUsuario(1, "Niki Lauda","123123",new Date(),null);
+
         System.out.println();
         System.out.println("### Obtener usuario existente (Laura) ####");
-        service.getUsuario(1);
-        // System.out.println("#### Actualizar empleado 30 ####");
-        // service.putEmpleado(30, "Laura Castillo");
-        // System.out.println();
-        // System.out.println("#### Eliminar empleado 21 ####");
-        // service.deleteEmpleado(1);
-        // System.out.println();
-        // System.out.println("#### Eliminar empleado 30 ####");
-        // service.deleteEmpleado(30);
-        // System.out.println();
-        // System.out.println("#### Listar todos los empleados con paginación page:0 size:3 ####");
-        // service.getEmpleados(0, 3);
-        // System.out.println();
+        usuario_service.getUsuario(1);
+
+        System.out.println();
+        System.out.println("#### Eliminar empleado 30 ####");
+        usuario_service.deleteUsuario(30);
+
+
+        System.out.println();
+        System.out.println("#### Intentar eliminar un usuario con prestamos activos");
+        usuario_service.deleteUsuario(1);
+        System.out.println();
+
+        System.out.println("#### Listar todos los usuarios con paginación page:0 size:3 ####");
+        usuario_service.getUsuarios(0, 1);
+
+
+        ///LIBROSS - Anadir mas ejemplos como actualizar libro, eliminar libro, listar todos,
+
+        System.out.println();
+        System.out.println("#### Anadir libro a la biblioteca");
+        libro_service.postLibro("calculus", "thomas", "14th International Edition", "pearson", "192309238-2", 30);
+
+        System.out.println();
+        System.out.println("#### Lista de todos los libros de la bilbioteca ");
+        libro_service.getlibros(0, 5);
+
     }
 
 }

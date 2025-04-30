@@ -24,12 +24,15 @@ public class Prestamo extends RepresentationModel<Prestamo>{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Schema(description = "Id del prestamo")
+    @Positive
     private int id_prestamo;
 
     @Schema(description = "usuario asociado")
+    @Positive
     private int id_usuario;
 
     @Schema(description = "libro asociado")
+    @Positive
     private int id_libro;
 
     @Schema(description = "fecha prestado")

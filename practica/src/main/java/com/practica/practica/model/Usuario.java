@@ -24,6 +24,7 @@ public class Usuario extends RepresentationModel<Usuario> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // valor generado por la base de datos
 	@Schema(description = "Id del usuario", required = true, example = "1")
+    @Positive
 	private int id;
 
 	@Schema(description = "Nombre del usuario", required = true, example = "Lionel")

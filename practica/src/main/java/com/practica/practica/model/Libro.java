@@ -23,6 +23,7 @@ public class Libro extends RepresentationModel<Libro>{
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // valor generado por la base de datos
 	@Schema(description = "Id del libro", required = true, example = "1")
+    @Positive
 	private int id;
 
     
@@ -42,6 +43,7 @@ public class Libro extends RepresentationModel<Libro>{
     @Schema(description = "ISBN del libro", required = false, example = "8435009513-E")
 	private String isbn;
 
+    @Positive
     @Schema(description = "Copias disponibles del libro", required = true, example = "2")
     // @NotNull(message = "Es obligatorio indicar las copias disponibles y no pueden ser 0")
 	private int copias;

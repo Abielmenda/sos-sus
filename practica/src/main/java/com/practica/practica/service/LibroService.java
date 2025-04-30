@@ -6,13 +6,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.practica.practica.model.Libro;
 import com.practica.practica.repository.LibroRepository;
+import com.practica.practica.repository.PrestamoRepository;
 
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service // Marcamos la clase compo componente de servicio
@@ -20,6 +25,7 @@ import lombok.AllArgsConstructor;
 public class LibroService{
 
     private final LibroRepository repository;
+    private final PrestamoRepository prestamo_repository;
 
     public boolean existeLibroPorId(int id) {
         return repository.existsById(id);
@@ -45,10 +51,28 @@ public class LibroService{
         } else if(disponible == null){
             return repository.findByTituloContains(contiene, paginable);
         }else if(contiene == null){
-            return repository.findByCopiasGreaterThan(0,paginable);
+            Page<Libro> libros = repository.findAll(paginable);
+            List<Libro> disponibles = libros.getContent().stream()
+
+            .filter(libro -> {
+                int prestados = prestamo_repository.myFindById_libro(libro.getId());
+                return (libro.getCopias() - prestados) > 0;
+            })
+            .collect(Collectors.toList());
+            System.out.println(disponibles);
+            return new PageImpl<>(disponibles, paginable, disponibles.size());
         }
         else {
-            return repository.findByTituloContainingAndCopiasGreaterThan(contiene,0, paginable);
+            Page<Libro> libros = repository.findByTituloContains(contiene,paginable);
+            List<Libro> disponibles = libros.getContent().stream()
+
+            .filter(libro -> {
+                int prestados = prestamo_repository.myFindById_libro(libro.getId());
+                return (libro.getCopias() - prestados) > 0;
+            })
+            .collect(Collectors.toList());
+            System.out.println(disponibles);
+            return new PageImpl<>(disponibles, paginable, disponibles.size());
         }
     }
 

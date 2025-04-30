@@ -65,14 +65,51 @@ public class Cliente {
 
 
         ///LIBROSS - Anadir mas ejemplos como actualizar libro, eliminar libro, listar todos,
+        System.out.println();
+        System.out.println("#### Lista de todos los libros de la bilbioteca ");
+        libro_service.getlibros(0, 5,null,null);
+
+        System.out.println();
+        System.out.println("#### Lista de todos los libros de la bilbioteca que tengan 'algebra' en el titulo");
+        libro_service.getlibros(0, 2,"algebra",null);
+
+
+        System.out.println();
+        System.out.println("#### Lista de todos los libros de la bilbioteca que tengan 'algebra' en el titulo y esten disponibles");
+        libro_service.getlibros(0, 1,"algebra",1);
+
 
         System.out.println();
         System.out.println("#### Anadir libro a la biblioteca");
         libro_service.postLibro("calculus", "thomas", "14th International Edition", "pearson", "192309238-2", 30);
 
+
         System.out.println();
-        System.out.println("#### Lista de todos los libros de la bilbioteca ");
-        libro_service.getlibros(0, 5);
+        System.out.println("#### Actualizar un libro existente en la biblioteca");
+        libro_service.putLibro(7,"calculus", "thomas", "14th International Edition", "pearson", "192309238-2", 30);
+
+        System.out.println();
+        System.out.println("#### Intento Actualizar un libro de la biblioteca inexistente");
+        libro_service.putLibro(-1,"calculus", "thomas", "14th International Edition", "pearson", "192309238-2", 30);
+
+        System.out.println();
+        System.out.println("#### Intento de eliminar un libro de la biblioteca");
+        libro_service.deleteLibro(7);
+
+
+        //Add deleteLibro con prestamo
+
+
+        System.out.println();
+        System.out.println("#### Intento de eliminar un libro de la biblioteca que se encuentra en un prestamo");
+        libro_service.deleteLibro(1);
+
+
+
+
+
+
+
 
     }
 

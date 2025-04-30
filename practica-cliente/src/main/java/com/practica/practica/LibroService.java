@@ -86,7 +86,7 @@ public class LibroService{
 
     }
 
-    public void putlibro(int libroId,String titulo,String autores,String edicion,String editorial,String isbn,int copias){
+    public void putLibro(int libroId,String titulo,String autores,String edicion,String editorial,String isbn,int copias){
         Libro libro = new Libro();
         libro.setId(libroId);
         libro.setTitulo(titulo);
@@ -132,9 +132,9 @@ public class LibroService{
                         .block();// Bloquea para obtener el resultado sincrónicamente
     }
 
-    public void getlibros(int page, int size) {
+    public void getlibros(int page, int size,String contiene, Integer disponible) {
         PageLibro libros = clienteWeb.get()
-                        .uri("/libros?page={page}&size={size}", page, size)
+                        .uri("/libros?page={page}&size={size}&contiene={contiene}&disponible={disponible}", page, size,contiene,disponible)
                         .retrieve()
                         .onStatus(HttpStatusCode::is4xxClientError, response -> response
                                         .bodyToMono(String.class)
@@ -152,12 +152,14 @@ public class LibroService{
         System.out.println("Página actual: " + libros.getPage().getNumber());
         System.out.println("Tamaño página: " + libros.getPage().getSize());
         System.out.println("Número de páginas: " + libros.getPage().getTotalPages());
-        System.out.println("**********************");
-        System.out.println("Links");
-        System.out.println("First: " + libros.get_links().getFirst().getHref());
-        System.out.println("Self: " + libros.get_links().getSelf().getHref());
-        System.out.println("Next: " + libros.get_links().getNext().getHref());
-        System.out.println("Last: " + libros.get_links().getLast().getHref());
+        if(libros.get_links().getFirst() != null){
+            System.out.println("**********************");
+            System.out.println("Links");
+            System.out.println("First: " + libros.get_links().getFirst().getHref());
+            System.out.println("Self: " + libros.get_links().getSelf().getHref());
+            System.out.println("Next: " + libros.get_links().getNext().getHref());
+            System.out.println("Last: " + libros.get_links().getLast().getHref());
+        }
         System.out.println("**********************");
         System.out.println("libros");
 
